@@ -3,8 +3,9 @@ version 38
 __lua__
 function _init()
 	p={x=64,y=90,speed=1}
-	pieuvre={x=30,y=1,speed=1}
 	spawn_pieuvre()
+	pieuvre={x=30,y=-50,sprite=19}
+	ingredients={}
 end
 
 function _update60()
@@ -12,13 +13,18 @@ function _update60()
 	if (btn(⬅️)) p.x-=p.speed
 	if (btn(⬆️)) p.y-=p.speed
 	if (btn(⬇️)) p.y+=p.speed
-	update_pieuvre()
+	falling_pieuvre()
+	update_ingredients()
 end
 
 function _draw()
 	cls()
 	map(0,0,0,0)
 	spr(96,p.x,p.y,4,4)
+	draw_ingredients()
+	for i in all(ingredients) do
+		spr(0,pieuvre.x,pieuvre.y)
+	end
 	draw_pieuvre()
 end
 
@@ -26,42 +32,56 @@ end
 --pieuvre
 
 function spawn_pieuvre()
-	pieuvre={
-		x=30,
-		y=1,
-		sprite=19
-}
+add(pieuvre,pieuvre)
+
 end
 
-function update_pieuvre()
-		local speed=0.5
-		
-			pieuvre.x+=speed
-		
-			if pieuvre.x==0 
-			or pieuvre.x>=60
-			
-			then pieuvre.x=-speed
-			end
-			
-			if pieuvre.x<=1	
-			then pieuvre.x+=speed
-			end	
---	if pieuvre.x >=0 
-		
--- and pieuvre.x <60 then
---	pieuvre.x+=speed
-		
--- elseif pieuvre.x ==59
-		
--- then pieuvre.x=pieuvre.x-speed
--- end
-		
+--descente de la pieuvre
+function falling_pieuvre()
+	local ymax=1
+	
+	-- operationnel
+		if pieuvre.y <= ymax then
+		pieuvre.y+=0.3
+		end
 end
+
 
 function draw_pieuvre()
 	spr(19,pieuvre.x,pieuvre.y,9,5)
 end
+-->8
+--ingredients
+
+function shoot_ingredients()
+	tomate={
+		x=pieuvre.x,
+		y=pieuvre.y,
+		speed=2
+}
+		add(ingredients,tomate)
+end
+
+function update_ingredients()
+	if pieuvre.y==1 then
+		return true
+		
+	else return false
+	end
+	
+	if pieuvre.y==true then
+		tomate+=tomate.speed
+	end
+	
+	for i in all(ingredients) do
+		i.y+=tomate.speed
+	end
+end
+
+function draw_ingredients()
+	spr(0,pieuvre.y,pieuvre.x)
+end
+
 __gfx__
 000000000000000000111000ffffffff000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00111b0000000bb001444100ffffffff000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
